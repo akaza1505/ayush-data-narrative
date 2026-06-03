@@ -11,8 +11,6 @@ const items = [
     color: "var(--iris)",
     points: [
       "Business requirement gathering & stakeholder coordination",
-      "Project execution support and workflow optimization",
-      "Data analysis, reporting, dashboard support",
       "Cross-functional collaboration across teams",
     ],
   },
@@ -25,7 +23,6 @@ const items = [
     points: [
       "Sales, distribution & KPI tracking analysis",
       "Market trend & campaign performance evaluation",
-      "Stakeholder coordination across regional teams",
       "Translated raw data into actionable insights",
     ],
   },
