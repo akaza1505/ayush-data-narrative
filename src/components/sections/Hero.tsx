@@ -121,7 +121,7 @@ export function Hero() {
                 data-cursor="explore"
                 className="group inline-flex items-center gap-3 rounded-full bg-ink px-6 py-4 text-sm text-paper transition-colors"
               >
-                View Portfolio
+                Explore Work
                 <ArrowUpRight size={16} className="transition-transform group-hover:rotate-45" />
               </a>
             </Magnetic>

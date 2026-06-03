@@ -10,8 +10,10 @@ const items = [
     Icon: Briefcase,
     color: "var(--iris)",
     points: [
-      "Business requirement gathering & stakeholder coordination",
-      "Cross-functional collaboration across teams",
+      "Gathered and documented business requirements.",
+      "Analyzed data to identify process improvements.",
+      "Built reports and dashboards using Power BI.",
+      "Coordinated with clients and cross-functional teams.",
     ],
   },
   {
@@ -21,9 +23,10 @@ const items = [
     Icon: TrendingUp,
     color: "var(--flame)",
     points: [
-      "Sales, distribution & KPI tracking analysis",
-      "Market trend & campaign performance evaluation",
-      "Translated raw data into actionable insights",
+      "Analyzed sales data and market trends.",
+      "Tracked KPIs and campaign performance.",
+      "Supported sales reporting and business analysis.",
+      "Provided insights to improve market coverage.",
     ],
   },
 ];
