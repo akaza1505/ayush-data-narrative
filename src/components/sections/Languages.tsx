@@ -12,7 +12,7 @@ const langs = [
 
 export function Languages() {
   return (
-    <section className="relative overflow-hidden border-t border-ink/10 py-32 md:py-44">
+    <section className="relative overflow-hidden border-t border-ink/10 py-16 md:py-24">
       <div className="mx-auto max-w-[1500px] px-6 lg:px-12">
         <div className="mb-12 flex items-baseline justify-between">
           <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">06 — Languages</span>

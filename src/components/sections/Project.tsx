@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useInView } from "motion/react";
+import { motion, useScroll, useTransform, useInView, AnimatePresence } from "motion/react";
 import { useState, useEffect, useRef } from "react";
 import {
   BarChart2,
@@ -20,6 +20,7 @@ import {
   Globe,
   Database,
   Layers,
+  X,
 } from "lucide-react";
 import { Reveal } from "../Reveal";
 import {
@@ -37,6 +38,40 @@ import {
   Area,
   Cell,
 } from "recharts";
+
+import screenshot51 from "@/public/Screenshot (51).png";
+import screenshot52 from "@/public/Screenshot (52).png";
+import screenshot53 from "@/public/Screenshot (53).png";
+import screenshot54 from "@/public/Screenshot (54).png";
+
+const images = [screenshot51, screenshot52, screenshot53, screenshot54];
+
+const dashboards = [
+  {
+    title: "Executive Summary Dashboard",
+    description: "Consolidated high-level ROI, ROAS, and revenue growth tracking across all marketing verticals.",
+    src: screenshot51,
+    tags: ["Power BI", "Executive Reporting", "ROI Tracking"],
+  },
+  {
+    title: "Channel Performance Analysis",
+    description: "Granular breakdown of media spend, CPA, and conversion rates across search, social, and display channels.",
+    src: screenshot52,
+    tags: ["DAX", "Channel Attribution", "Spend Analysis"],
+  },
+  {
+    title: "Live Campaign Monitor",
+    description: "Real-time tracking of active campaigns with anomaly detection and automated alert parameters.",
+    src: screenshot53,
+    tags: ["Power BI Embedded", "Real-time Data", "KPI Monitoring"],
+  },
+  {
+    title: "Conversion Funnel Analysis",
+    description: "Multi-stage funnel mapping from impression to lead capture, highlighting drop-off points.",
+    src: screenshot54,
+    tags: ["Funnel Visualization", "User Behavior", "Process Optimization"],
+  },
+];
 
 // Segment definitions for interactive campaign filtering
 const SEGMENTS = {
@@ -282,15 +317,15 @@ function CounterKpi({ value, suffix, active }: { value: number; suffix: string; 
     if (!active) return;
     const start = performance.now();
     const duration = 2000;
-    
+
     const step = (now: number) => {
       const progress = Math.min((now - start) / duration, 1);
       const eased = 1 - Math.pow(1 - progress, 3);
       setCount(Math.floor(eased * value));
-      
+
       if (progress < 1) frameRef.current = requestAnimationFrame(step);
     };
-    
+
     frameRef.current = requestAnimationFrame(step);
     return () => cancelAnimationFrame(frameRef.current);
   }, [active, value]);
@@ -351,6 +386,44 @@ export function Project() {
 
   const [segment, setSegment] = useState<"all" | "ecommerce" | "saas" | "leadgen">("all");
   const [activeTab, setActiveTab] = useState<number>(0);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const segmentOptions: { value: "all" | "ecommerce" | "saas" | "leadgen"; label: string }[] = [
+    { value: "all", label: "All Verticals" },
+    { value: "ecommerce", label: "E-Commerce" },
+    { value: "saas", label: "B2B SaaS" },
+    { value: "leadgen", label: "Lead Gen" },
+  ];
+
+  const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
+  const [marqueeHovered, setMarqueeHovered] = useState(false);
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (activeLightboxIndex === null) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveLightboxIndex(null);
+      } else if (e.key === "ArrowRight") {
+        setActiveLightboxIndex((prev) => (prev !== null && prev < dashboards.length - 1 ? prev + 1 : 0));
+      } else if (e.key === "ArrowLeft") {
+        setActiveLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : dashboards.length - 1));
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [activeLightboxIndex]);
+
+
+  const nextSlide = () => {
+    setActiveLightboxIndex((prev) => (prev !== null && prev < dashboards.length - 1 ? prev + 1 : 0));
+  };
+
+  const prevSlide = () => {
+    setActiveLightboxIndex((prev) => (prev !== null && prev > 0 ? prev - 1 : dashboards.length - 1));
+  };
 
   // Live Stream state variables (Slide 3)
   const [liveData, setLiveData] = useState<{ time: string; Users: number; Conversions: number }[]>([]);
@@ -380,7 +453,7 @@ export function Project() {
     const interval = setInterval(() => {
       const date = new Date();
       const timeStr = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      
+
       const newUsers = Math.floor(Math.random() * 60) + 80;
       const newConversions = Math.floor(Math.random() * 6) + 2;
 
@@ -409,33 +482,33 @@ export function Project() {
     <section
       id="work"
       ref={sectionRef}
-      className="relative border-t border-white/[0.06] py-24 md:py-32 overflow-hidden bg-black text-paper"
+      className="relative border-t border-ink/10 py-16 md:py-24 overflow-hidden bg-paper text-ink"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-ink/[0.005] via-transparent to-transparent pointer-events-none" />
 
       <div className="mx-auto max-w-[1500px] px-6 lg:px-12">
         {/* HEADER */}
         <div className="mb-12 flex items-baseline justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/40">04 — Case Study</span>
-          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/40">Featured Work</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">04 — Case Study</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">Featured Work</span>
         </div>
 
         {/* First section (Original Visuals) */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 items-center">
           <div className="lg:col-span-4">
             <Reveal>
-              <h2 className="font-display text-[clamp(2.2rem,4vw,3.8rem)] font-light leading-[1.1] tracking-[-0.03em] text-balance text-paper">
+              <h2 className="font-display text-[clamp(2.2rem,4vw,3.8rem)] font-light leading-[1.1] tracking-[-0.03em] text-balance">
                 Marketing Campaign Performance — <span className="italic">a Power BI story.</span>
               </h2>
             </Reveal>
-            <Reveal delay={0.1} className="mt-4 text-sm text-paper/50 leading-relaxed">
+            <Reveal delay={0.1} className="mt-4 text-sm text-mist leading-relaxed">
               An interactive, live analytical report built to bridge media spend with business outcomes. Explore campaign data across verticals, inspect real-time performance, and analyze conversion drop-offs.
             </Reveal>
-            <Reveal delay={0.15} className="mt-6 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-widest text-paper/40">
-              <span className="rounded-full border border-white/15 px-3 py-1">Power BI</span>
-              <span className="rounded-full border border-white/15 px-3 py-1">DAX</span>
-              <span className="rounded-full border border-white/15 px-3 py-1">Attribution</span>
-              <span className="rounded-full border border-white/15 px-3 py-1">Executive Reporting</span>
+            <Reveal delay={0.15} className="mt-6 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-widest text-mist">
+              <span className="rounded-full border border-ink/15 px-3 py-1">Power BI</span>
+              <span className="rounded-full border border-ink/15 px-3 py-1">DAX</span>
+              <span className="rounded-full border border-ink/15 px-3 py-1">Attribution</span>
+              <span className="rounded-full border border-ink/15 px-3 py-1">Executive Reporting</span>
             </Reveal>
           </div>
 
@@ -445,10 +518,10 @@ export function Project() {
             style={{ y: dashboardY, rotate: dashboardRotate }}
             className="lg:col-span-8 flex justify-center w-full"
           >
-            <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-charcoal/90 text-paper shadow-2xl w-full flex flex-col h-[520px]">
-              
+            <div className="relative overflow-hidden rounded-2xl border border-white/[0.08] bg-[#000000] text-paper shadow-2xl w-full flex flex-col h-[520px]">
+
               {/* TOP BAR / POWER BI WORKSPACE */}
-              <div className="flex items-center justify-between border-b border-white/[0.08] bg-white/[0.02] px-4 py-3">
+              <div className="flex items-center justify-between border-b border-white/[0.08] bg-black px-4 py-3">
                 <div className="flex items-center gap-2.5">
                   <div className="flex h-5 w-5 items-center justify-center rounded bg-amber-500 text-ink font-bold text-[10px]">
                     BI
@@ -473,25 +546,38 @@ export function Project() {
                     Live Feed
                   </div>
 
-                  {/* Segment Dropdown Selector */}
-                  <div className="relative">
-                    <select
-                      value={segment}
-                      onChange={(e) => setSegment(e.target.value as any)}
-                      className="appearance-none bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] rounded-lg pl-2.5 pr-8 py-1.5 text-[10px] font-mono text-paper focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
+                  {/* Segment Dropdown Selector — custom dark-themed */}
+                  <div className="relative" onBlur={() => setDropdownOpen(false)}>
+                    <button
+                      onClick={() => setDropdownOpen((o) => !o)}
+                      className="flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] rounded-lg pl-2.5 pr-2.5 py-1.5 text-[10px] font-mono text-paper focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
                     >
-                      <option value="all">All Verticals</option>
-                      <option value="ecommerce">E-Commerce</option>
-                      <option value="saas">B2B SaaS</option>
-                      <option value="leadgen">Lead Gen</option>
-                    </select>
-                    <SlidersHorizontal size={10} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-paper/40 pointer-events-none" />
+                      {segmentOptions.find((o) => o.value === segment)?.label}
+                      <SlidersHorizontal size={10} className="text-paper/40" />
+                    </button>
+                    {dropdownOpen && (
+                      <div className="absolute right-0 top-full mt-1 z-50 min-w-[130px] overflow-hidden rounded-lg border border-white/[0.12] bg-[#111111] shadow-xl">
+                        {segmentOptions.map((opt) => (
+                          <button
+                            key={opt.value}
+                            onClick={() => { setSegment(opt.value); setDropdownOpen(false); }}
+                            className={`w-full text-left px-3 py-2 text-[10px] font-mono transition-colors ${
+                              segment === opt.value
+                                ? "bg-amber-500/20 text-amber-400"
+                                : "text-paper/70 hover:bg-white/[0.06] hover:text-paper"
+                            }`}
+                          >
+                            {opt.label}
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
 
               {/* REPORT PAGES NAVIGATION */}
-              <div className="flex items-center gap-1 border-b border-white/[0.08] bg-white/[0.01] p-1.5 overflow-x-auto scrollbar-none">
+              <div className="flex items-center gap-1 border-b border-white/[0.08] bg-black p-1.5 overflow-x-auto scrollbar-none">
                 {tabs.map((tab, idx) => {
                   const Icon = tab.icon;
                   const isActive = activeTab === idx;
@@ -499,11 +585,10 @@ export function Project() {
                     <button
                       key={idx}
                       onClick={() => setActiveTab(idx)}
-                      className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[10px] font-medium transition-all shrink-0 ${
-                        isActive
-                          ? "bg-white/[0.08] text-paper border border-white/[0.08] shadow-sm font-semibold"
-                          : "text-paper/40 hover:text-paper/70 hover:bg-white/[0.02]"
-                      }`}
+                      className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-[10px] font-medium transition-all shrink-0 ${isActive
+                        ? "bg-white/[0.08] text-paper border border-white/[0.08] shadow-sm font-semibold"
+                        : "text-paper/40 hover:text-paper/70 hover:bg-white/[0.02]"
+                        }`}
                     >
                       <Icon size={11} strokeWidth={isActive ? 2.5 : 2} className={isActive ? "text-amber-400" : ""} />
                       {tab.title}
@@ -513,8 +598,8 @@ export function Project() {
               </div>
 
               {/* CANVAS / CHART VIEW AREA */}
-              <div className="flex-1 p-5 flex flex-col justify-between overflow-hidden bg-gradient-to-b from-white/[0.01] to-transparent">
-                
+              <div className="flex-1 p-5 flex flex-col justify-between overflow-hidden bg-black">
+
                 {/* PAGE DYNAMIC KPI SUMMARY CARD */}
                 <div className="grid grid-cols-4 gap-3 mb-4">
                   {activeTab === 0 && (
@@ -621,7 +706,7 @@ export function Project() {
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
                         <XAxis dataKey="month" stroke="rgba(255,255,255,0.3)" fontSize={10} tickLine={false} />
-                        <YAxis yAxisId="left" stroke="rgba(255,255,255,0.3)" fontSize={9} tickFormatter={(v) => `$${v/1000}k`} tickLine={false} />
+                        <YAxis yAxisId="left" stroke="rgba(255,255,255,0.3)" fontSize={9} tickFormatter={(v) => `$${v / 1000}k`} tickLine={false} />
                         <YAxis yAxisId="right" orientation="right" stroke="rgba(255,255,255,0.3)" fontSize={9} tickFormatter={(v) => `${v}x`} tickLine={false} />
                         <RechartsTooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
                         <Legend wrapperStyle={{ fontSize: '9px', color: 'rgba(255,255,255,0.5)', paddingTop: '5px' }} />
@@ -655,8 +740,8 @@ export function Project() {
                       >
                         <defs>
                           <linearGradient id="colorUsers" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#10B981" stopOpacity={0.25}/>
-                            <stop offset="95%" stopColor="#10B981" stopOpacity={0}/>
+                            <stop offset="5%" stopColor="#10B981" stopOpacity={0.25} />
+                            <stop offset="95%" stopColor="#10B981" stopOpacity={0} />
                           </linearGradient>
                         </defs>
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
@@ -676,7 +761,7 @@ export function Project() {
                         margin={{ top: 10, right: 10, left: 10, bottom: 5 }}
                       >
                         <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" horizontal={false} />
-                        <XAxis type="number" stroke="rgba(255,255,255,0.3)" fontSize={9} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${v/1000}k` : v} />
+                        <XAxis type="number" stroke="rgba(255,255,255,0.3)" fontSize={9} tickLine={false} tickFormatter={(v) => v >= 1000 ? `${v / 1000}k` : v} />
                         <YAxis type="category" dataKey="stage" stroke="rgba(255,255,255,0.5)" fontSize={9} width={80} tickLine={false} />
                         <RechartsTooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255,255,255,0.02)' }} />
                         <Bar dataKey="value" name="Volume" radius={[0, 4, 4, 0]} barSize={20}>
@@ -715,11 +800,10 @@ export function Project() {
                       </button>
                       <button
                         onClick={() => setIsLivePlaying(!isLivePlaying)}
-                        className={`flex items-center gap-1 rounded px-2.5 py-1 text-[9px] font-mono transition-colors ${
-                          isLivePlaying
-                            ? "bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20"
-                            : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
-                        }`}
+                        className={`flex items-center gap-1 rounded px-2.5 py-1 text-[9px] font-mono transition-colors ${isLivePlaying
+                          ? "bg-amber-500/10 text-amber-400 border border-amber-500/20 hover:bg-amber-500/20"
+                          : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-emerald-500/20"
+                          }`}
                       >
                         {isLivePlaying ? (
                           <>
@@ -737,7 +821,7 @@ export function Project() {
               </div>
 
               {/* REPORT BOTTOM NAVIGATION BAR */}
-              <div className="flex items-center justify-between border-t border-white/[0.08] bg-white/[0.02] px-4 py-2 text-[10px] font-mono text-paper/40">
+              <div className="flex items-center justify-between border-t border-white/[0.08] bg-black px-4 py-2 text-[10px] font-mono text-paper/40">
                 <div className="flex items-center gap-1.5">
                   <Globe size={11} className="text-amber-500/70" />
                   <span>https://app.powerbi.com/ayush-portfolio</span>
@@ -772,143 +856,120 @@ export function Project() {
           </motion.div>
         </div>
 
-        {/* Second section (Case Study Details Box) */}
-        <div className="mt-16 relative rounded-2xl border border-white/[0.08] bg-ink text-paper overflow-hidden shadow-2xl">
-          {/* Colored top bar */}
+        {/* Sliding Image Marquee Strip */}
+        <div className="mt-16 animate-fade-in">
+          {/* Label row */}
+          <div className="mb-6 flex items-center justify-between px-1">
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">Dashboard Pages</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">Power BI · 4 Views</span>
+          </div>
+
+          {/* Overflow container with edge fade */}
           <div
-            className="h-1 w-full"
-            style={{ background: "linear-gradient(90deg, #F59E0B, #F43F5E, #3B82F6, #10B981)" }}
-          />
-
-          <div className="p-6 md:p-12 lg:p-16">
-            
-            {/* Title & Metadata badges */}
-            <div className="flex flex-wrap items-center gap-3 mb-6">
-              <span className="text-xs font-semibold px-3 py-1 rounded-full border border-amber-500/30 text-amber-400 bg-amber-500/10">
-                Analysis & Insights
-              </span>
-              <span className="text-xs font-semibold px-3 py-1 rounded-full border border-white/10 text-paper/40">
-                Marketing ROI Optimization
-              </span>
-            </div>
-
-            <h3 className="text-2xl md:text-3xl font-bold tracking-tight text-paper mb-8">
-              Campaign Performance Deep Dive
-            </h3>
-
-            {/* Problem / Solution Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-              <div className="p-6 rounded-xl border border-white/[0.06] bg-white/[0.02]">
-                <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-paper/40 mb-3">
-                  The Problem
-                </h4>
-                <p className="text-sm text-paper/70 leading-relaxed">
-                  Fragmented data across 5+ channels made it impossible to assess campaign ROI. Creative performance insights were siloed, leading to budget waste on low-converting channels.
-                </p>
-              </div>
-              <div className="p-6 rounded-xl border border-white/[0.06] bg-white/[0.02]">
-                <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-paper/40 mb-3">
-                  The Solution
-                </h4>
-                <p className="text-sm text-paper/70 leading-relaxed">
-                  Consolidated multi-source data into a single Power BI model. Designed interactive executive dashboards with drill-through parameters mapping touchpoint paths, attribution trends, and real-time CPC vs. ROAS metrics.
-                </p>
-              </div>
-            </div>
-
-            {/* KPI METRICS */}
+            className="marquee-container relative overflow-hidden rounded-2xl"
+            style={{
+              maskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
+            }}
+          >
             <div
-              ref={kpiRef}
-              className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12 border-t border-white/[0.06] pt-12"
+              className="marquee-track flex gap-5"
+              style={{
+                width: "max-content",
+                animation: "marquee-rtl 18s linear infinite",
+                animationPlayState: marqueeHovered ? "paused" : "running",
+              }}
             >
-              {SEGMENT_KPIS[segment].map(({ label, value, suffix, color, icon: Icon }) => (
+              {[...images, ...images].map((src, i) => (
                 <div
-                  key={`${label}-${segment}`}
-                  className="p-5 rounded-xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-colors duration-300"
+                  key={i}
+                  onMouseEnter={() => {
+                    setMarqueeHovered(true);
+                    setActiveLightboxIndex(i % images.length);
+                  }}
+                  onMouseLeave={() => {
+                    setMarqueeHovered(false);
+                    setActiveLightboxIndex(null);
+                  }}
+                  className="group relative flex-shrink-0 cursor-pointer overflow-hidden rounded-xl border border-ink/10 shadow-lg"
+                  style={{ width: "clamp(300px, 36vw, 560px)", aspectRatio: "16/10" }}
                 >
-                  <div className="flex items-center gap-2 mb-3">
-                    <Icon size={14} style={{ color }} strokeWidth={1.8} />
-                    <span className="text-[10px] uppercase tracking-[0.15em] text-paper/40 font-medium">
-                      {label}
-                    </span>
-                  </div>
-                  <div className="text-3xl font-extrabold" style={{ color }}>
-                    <CounterKpi value={value} suffix={suffix} active={kpiVisible} />
-                  </div>
+                  <img
+                    src={src}
+                    alt={`Dashboard view ${(i % images.length) + 1}`}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+                    draggable={false}
+                  />
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-400" />
                 </div>
               ))}
             </div>
+          </div>
 
-            {/* Channel Performance & Insights Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-12 border-t border-white/[0.06] pt-12">
-              
-              {/* Channel Performance */}
-              <div className="lg:col-span-6">
-                <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-paper/40 mb-6">
-                  Channel Performance Index
-                </h4>
-                <div className="space-y-5">
-                  {SEGMENT_CHANNELS[segment].map(({ name, performance, color }, i) => (
-                    <div key={`${name}-${segment}`} className="flex items-center gap-4">
-                      <span className="text-sm text-paper/50 w-32 flex-shrink-0">{name}</span>
-                      <div className="flex-1">
-                        <AnimatedBar
-                          width={performance}
-                          color={color}
-                          delay={i * 150}
-                          active={kpiVisible}
-                        />
-                      </div>
-                      <span className="text-sm font-semibold w-10 text-right" style={{ color }}>
-                        {performance}%
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
+          <style>{`
+            @keyframes marquee-rtl {
+              0%   { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+          `}</style>
 
-              {/* Key Insights */}
-              <div className="lg:col-span-6">
-                <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-paper/40 mb-6">
-                  Key Insights Delivered
-                </h4>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 gap-4">
-                  {SEGMENT_INSIGHTS[segment].map(({ icon: Icon, text, color }, index) => (
-                    <div
-                      key={`${index}-${segment}`}
-                      className="flex items-start gap-4 p-4 rounded-xl border border-white/[0.05] bg-white/[0.015] hover:bg-white/[0.03] transition-colors"
-                    >
-                      <div
-                        className="p-2 rounded-lg flex-shrink-0 mt-0.5"
-                        style={{ background: `${color}18` }}
-                      >
-                        <Icon size={14} style={{ color }} strokeWidth={2} />
-                      </div>
-                      <p className="text-sm text-paper/70 leading-relaxed">{text}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-            </div>
-
-            {/* CTA FOOTER */}
-            <div className="mt-12 pt-8 border-t border-white/[0.05] flex items-center justify-between flex-wrap gap-4">
-              <p className="text-sm text-paper/35 font-light italic max-w-sm">
-                "Data is only valuable when it drives decisions."
-              </p>
-              <button
-                onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
-                className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-paper/50 hover:text-paper transition-colors duration-300 group"
-              >
-                Discuss this work
-                <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
-              </button>
-            </div>
-
+          {/* CTA FOOTER */}
+          <div className="mt-12 pt-8 border-t border-ink/10 flex justify-end">
+            <button
+              onClick={() => document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })}
+              className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-charcoal hover:text-ink transition-colors duration-300 group cursor-pointer"
+            >
+              Discuss this work
+              <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Lightbox Modal */}
+      <AnimatePresence>
+        {activeLightboxIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-4 backdrop-blur-md pointer-events-none"
+          >
+            {/* Top Header info */}
+            <div className="absolute top-6 left-6 text-white/70 font-mono text-[11px] tracking-wider uppercase">
+              <span className="font-semibold text-white">{dashboards[activeLightboxIndex].title}</span>
+              <span className="mx-2">·</span>
+              <span>{activeLightboxIndex + 1} / {images.length}</span>
+            </div>
+
+            {/* Main Image View */}
+            <div className="relative max-w-5xl max-h-[75vh] w-full flex items-center justify-center">
+              <motion.img
+                key={activeLightboxIndex}
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                src={images[activeLightboxIndex]}
+                alt={dashboards[activeLightboxIndex].title}
+                className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl border border-white/10"
+              />
+            </div>
+
+            {/* Description metadata */}
+            <div className="absolute bottom-8 text-center max-w-xl px-4">
+              <p className="text-white text-sm font-medium mb-2">{dashboards[activeLightboxIndex].description}</p>
+              <div className="flex flex-wrap justify-center gap-1.5 mt-2">
+                {dashboards[activeLightboxIndex].tags.map((tag, idx) => (
+                  <span key={idx} className="font-mono text-[9px] uppercase tracking-widest text-white/50 border border-white/10 rounded-full px-2 py-0.5">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

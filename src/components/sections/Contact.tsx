@@ -26,7 +26,7 @@ export function Contact() {
         </div>
       </div>
 
-      <div className="relative mx-auto max-w-[1500px] px-6 py-32 lg:px-12 md:py-44">
+      <div className="relative mx-auto max-w-[1500px] px-6 py-16 lg:px-12 md:py-24">
         <div className="mb-12 flex items-baseline justify-between">
           <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/50">07 — Contact</span>
           <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/50">Say hello</span>
