@@ -409,33 +409,33 @@ export function Project() {
     <section
       id="work"
       ref={sectionRef}
-      className="relative border-t border-ink/10 py-24 md:py-32 overflow-hidden bg-paper text-ink"
+      className="relative border-t border-white/[0.06] py-24 md:py-32 overflow-hidden bg-black text-paper"
     >
-      <div className="absolute inset-0 bg-gradient-to-b from-ink/[0.005] via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] via-transparent to-transparent pointer-events-none" />
 
       <div className="mx-auto max-w-[1500px] px-6 lg:px-12">
         {/* HEADER */}
         <div className="mb-12 flex items-baseline justify-between">
-          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">04 — Case Study</span>
-          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">Featured Work</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/40">04 — Case Study</span>
+          <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-paper/40">Featured Work</span>
         </div>
 
         {/* First section (Original Visuals) */}
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16 items-center">
           <div className="lg:col-span-4">
             <Reveal>
-              <h2 className="font-display text-[clamp(2.2rem,4vw,3.8rem)] font-light leading-[1.1] tracking-[-0.03em] text-balance">
+              <h2 className="font-display text-[clamp(2.2rem,4vw,3.8rem)] font-light leading-[1.1] tracking-[-0.03em] text-balance text-paper">
                 Marketing Campaign Performance — <span className="italic">a Power BI story.</span>
               </h2>
             </Reveal>
-            <Reveal delay={0.1} className="mt-4 text-sm text-mist leading-relaxed">
+            <Reveal delay={0.1} className="mt-4 text-sm text-paper/50 leading-relaxed">
               An interactive, live analytical report built to bridge media spend with business outcomes. Explore campaign data across verticals, inspect real-time performance, and analyze conversion drop-offs.
             </Reveal>
-            <Reveal delay={0.15} className="mt-6 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-widest text-mist">
-              <span className="rounded-full border border-ink/15 px-3 py-1">Power BI</span>
-              <span className="rounded-full border border-ink/15 px-3 py-1">DAX</span>
-              <span className="rounded-full border border-ink/15 px-3 py-1">Attribution</span>
-              <span className="rounded-full border border-ink/15 px-3 py-1">Executive Reporting</span>
+            <Reveal delay={0.15} className="mt-6 flex flex-wrap gap-2 font-mono text-[10px] uppercase tracking-widest text-paper/40">
+              <span className="rounded-full border border-white/15 px-3 py-1">Power BI</span>
+              <span className="rounded-full border border-white/15 px-3 py-1">DAX</span>
+              <span className="rounded-full border border-white/15 px-3 py-1">Attribution</span>
+              <span className="rounded-full border border-white/15 px-3 py-1">Executive Reporting</span>
             </Reveal>
           </div>
 
