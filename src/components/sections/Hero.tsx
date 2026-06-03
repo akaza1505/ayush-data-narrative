@@ -1,8 +1,8 @@
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef, useEffect, useState } from "react";
 import { ArrowUpRight, BarChart3, LineChart, PieChart, Sparkles, Database, TrendingUp } from "lucide-react";
-import { Magnetic } from "./Magnetic";
-import { SplitText } from "./Reveal";
+import { Magnetic } from "../Magnetic";
+import { SplitText } from "../Reveal";
 
 const floats = [
   { Icon: BarChart3, color: "var(--iris)", x: "8%", y: "22%", size: 28, d: 0 },
