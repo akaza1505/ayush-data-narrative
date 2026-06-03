@@ -73,7 +73,7 @@ export function Hero() {
         >
           <span className="h-px w-12 bg-ink/30" />
           <span>Portfolio · 2026</span>
-          <span className="ml-auto hidden md:inline">Bhubaneswar, IN</span>
+          <span className="ml-auto hidden md:inline">India</span>
         </motion.div>
 
         <h1 className="font-display text-[clamp(3.2rem,11vw,12rem)] font-light leading-[0.88] tracking-[-0.04em]">

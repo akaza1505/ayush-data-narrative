@@ -88,7 +88,7 @@ export function Contact() {
         <footer className="mt-32 flex flex-col gap-6 border-t border-paper/10 pt-10 font-mono text-[11px] uppercase tracking-widest text-paper/40 md:flex-row md:items-center md:justify-between">
           <div>© 2026 Ayush Kumar Singh</div>
           <div className="flex gap-6">
-            <span>Bhubaneswar · IN</span>
+            <span>India</span>
             <span>Available for hire</span>
           </div>
           <div>Crafted with care</div>
