@@ -380,6 +380,7 @@ export function Project() {
   const kpiVisible = useInView(kpiRef, { once: true, amount: 0.2 });
 
   const dashboardRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: dashboardRef, offset: ["start end", "end start"] });
   const dashboardY = useTransform(scrollYProgress, [0, 1], [30, -30]);
   const dashboardRotate = useTransform(scrollYProgress, [0, 1], [-1, 1]);
@@ -387,6 +388,18 @@ export function Project() {
   const [segment, setSegment] = useState<"all" | "ecommerce" | "saas" | "leadgen">("all");
   const [activeTab, setActiveTab] = useState<number>(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!dropdownOpen) return;
+    const handleOutside = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleOutside);
+    return () => document.removeEventListener("mousedown", handleOutside);
+  }, [dropdownOpen]);
 
   const segmentOptions: { value: "all" | "ecommerce" | "saas" | "leadgen"; label: string }[] = [
     { value: "all", label: "All Verticals" },
@@ -547,7 +560,7 @@ export function Project() {
                   </div>
 
                   {/* Segment Dropdown Selector — custom dark-themed */}
-                  <div className="relative" onBlur={() => setDropdownOpen(false)}>
+                  <div ref={dropdownRef} className="relative">
                     <button
                       onClick={() => setDropdownOpen((o) => !o)}
                       className="flex items-center gap-2 bg-white/[0.06] hover:bg-white/[0.1] border border-white/[0.1] rounded-lg pl-2.5 pr-2.5 py-1.5 text-[10px] font-mono text-paper focus:outline-none focus:ring-1 focus:ring-amber-500 cursor-pointer transition-colors"
@@ -560,7 +573,7 @@ export function Project() {
                         {segmentOptions.map((opt) => (
                           <button
                             key={opt.value}
-                            onClick={() => { setSegment(opt.value); setDropdownOpen(false); }}
+                            onMouseDown={() => { setSegment(opt.value); setDropdownOpen(false); }}
                             className={`w-full text-left px-3 py-2 text-[10px] font-mono transition-colors ${
                               segment === opt.value
                                 ? "bg-amber-500/20 text-amber-400"
