@@ -77,14 +77,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "Ayush Kumar Singh — Business Analytics & Consulting Portfolio" },
+      { name: "description", content: "Portfolio of Ayush Kumar Singh — MBA candidate in Business Analytics. Data analysis, Power BI, process optimization, and AI-assisted analytics." },
+      { name: "author", content: "Ayush Kumar Singh" },
+      { property: "og:title", content: "Ayush Kumar Singh — Business Analytics Portfolio" },
+      { property: "og:description", content: "Bridging business needs with data-driven solutions." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {

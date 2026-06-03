@@ -8,6 +8,7 @@ export function Cursor() {
   const sy = useSpring(y, { damping: 30, stiffness: 400, mass: 0.4 });
   const [hover, setHover] = useState(false);
   const [label, setLabel] = useState<string | null>(null);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
@@ -18,6 +19,9 @@ export function Cursor() {
       setHover(!!interactive);
       const l = interactive?.getAttribute("data-cursor");
       setLabel(l || null);
+      
+      const darkContainer = el.closest(".bg-ink");
+      setIsDark(!!darkContainer);
     };
     window.addEventListener("mousemove", move);
     return () => window.removeEventListener("mousemove", move);
@@ -34,13 +38,13 @@ export function Cursor() {
         <motion.div
           animate={{
             scale: hover ? 2.4 : 1,
-            backgroundColor: hover ? "var(--ink)" : "var(--ink)",
+            backgroundColor: isDark ? "var(--paper)" : "var(--ink)",
           }}
           transition={{ type: "spring", stiffness: 300, damping: 20 }}
           className="h-2 w-2 rounded-full"
         />
         {label && (
-          <span className="absolute left-4 top-4 whitespace-nowrap rounded-full bg-ink px-3 py-1 text-[10px] font-mono uppercase tracking-widest text-paper">
+          <span className={`absolute left-4 top-4 whitespace-nowrap rounded-full px-3 py-1 text-[10px] font-mono uppercase tracking-widest transition-colors duration-300 ${isDark ? "bg-paper text-ink" : "bg-ink text-paper"}`}>
             {label}
           </span>
         )}
@@ -50,9 +54,13 @@ export function Cursor() {
         className="pointer-events-none fixed left-0 top-0 z-[99] -translate-x-1/2 -translate-y-1/2"
       >
         <motion.div
-          animate={{ scale: hover ? 0 : 1, opacity: hover ? 0 : 0.4 }}
+          animate={{
+            scale: hover ? 0 : 1,
+            opacity: hover ? 0 : 0.4,
+            borderColor: isDark ? "var(--paper)" : "var(--ink)",
+          }}
           transition={{ type: "spring", stiffness: 200, damping: 25 }}
-          className="h-10 w-10 rounded-full border border-ink"
+          className="h-10 w-10 rounded-full border"
         />
       </motion.div>
     </>
