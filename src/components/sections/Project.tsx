@@ -43,8 +43,40 @@ import screenshot51 from "@/public/Screenshot (51).png";
 import screenshot52 from "@/public/Screenshot (52).png";
 import screenshot53 from "@/public/Screenshot (53).png";
 import screenshot54 from "@/public/Screenshot (54).png";
+import screenshot55 from "@/public/Screenshot (55).png";
+import screenshot56 from "@/public/Screenshot (56).png";
+import screenshot57 from "@/public/Screenshot (57).png";
+import screenshot58 from "@/public/Screenshot (58).png";
+import screenshot59 from "@/public/Screenshot (59).png";
 
 const images = [screenshot51, screenshot52, screenshot53, screenshot54];
+
+const dashboards2 = [
+  {
+    title: "Operational Metrics & Cost Allocation",
+    description: "Detailed breakdown of operational metrics and cost allocation across departments.",
+    src: screenshot56,
+    tags: ["Operations", "Cost Analysis", "Power BI"],
+  },
+  {
+    title: "Geographic Lead Distribution",
+    description: "Geographic distribution of leads and customer acquisition costs per region.",
+    src: screenshot57,
+    tags: ["Geo-mapping", "CAC", "Lead Gen"],
+  },
+  {
+    title: "Product Performance Tracking",
+    description: "Product performance tracking across different demographics and segments.",
+    src: screenshot58,
+    tags: ["Demographics", "Product Metrics", "Sales"],
+  },
+  {
+    title: "YoY Growth & Forecasting",
+    description: "Year-over-year growth visualization and advanced trend forecasting models.",
+    src: screenshot59,
+    tags: ["Forecasting", "YoY Growth", "Trends"],
+  },
+];
 
 const dashboards = [
   {
@@ -409,11 +441,16 @@ export function Project() {
   ];
 
   const [activeLightboxIndex, setActiveLightboxIndex] = useState<number | null>(null);
-  const [marqueeHovered, setMarqueeHovered] = useState(false);
 
   // Keyboard navigation for lightbox
   useEffect(() => {
-    if (activeLightboxIndex === null) return;
+    if (activeLightboxIndex === null) {
+      document.body.style.overflow = "";
+      return;
+    }
+    
+    // Prevent body scroll when modal is open
+    document.body.style.overflow = "hidden";
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -426,7 +463,10 @@ export function Project() {
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      document.body.style.overflow = "";
+    };
   }, [activeLightboxIndex]);
 
 
@@ -877,54 +917,45 @@ export function Project() {
             <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-mist">Power BI · 4 Views</span>
           </div>
 
-          {/* Overflow container with edge fade */}
-          <div
-            className="marquee-container relative overflow-hidden rounded-2xl"
-            style={{
-              maskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
-              WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 6%, black 94%, transparent 100%)",
-            }}
-          >
-            <div
-              className="marquee-track flex gap-5"
-              style={{
-                width: "max-content",
-                animation: "marquee-rtl 18s linear infinite",
-                animationPlayState: marqueeHovered ? "paused" : "running",
-              }}
+          {/* Dashboard Previews */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            {/* Dashboard Group 1 Preview */}
+            <div 
+              className="relative overflow-hidden rounded-2xl border border-ink/10 shadow-xl cursor-pointer group" 
+              onClick={() => setActiveLightboxIndex(0)}
             >
-              {[...images, ...images].map((src, i) => (
-                <div
-                  key={i}
-                  onMouseEnter={() => {
-                    setMarqueeHovered(true);
-                    setActiveLightboxIndex(i % images.length);
-                  }}
-                  onMouseLeave={() => {
-                    setMarqueeHovered(false);
-                    setActiveLightboxIndex(null);
-                  }}
-                  className="group relative flex-shrink-0 cursor-pointer overflow-hidden rounded-xl border border-ink/10 shadow-lg"
-                  style={{ width: "clamp(300px, 36vw, 560px)", aspectRatio: "16/10" }}
-                >
-                  <img
-                    src={src}
-                    alt={`Dashboard view ${(i % images.length) + 1}`}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-[1.04]"
-                    draggable={false}
-                  />
-                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all duration-400" />
-                </div>
-              ))}
+              <img
+                src={images[0]}
+                alt="Dashboard overview"
+                className="w-full object-cover"
+                style={{ aspectRatio: "16/9" }}
+              />
+              <div className="absolute top-4 right-4 bg-paper/90 backdrop-blur-sm text-ink px-4 py-2 rounded-full font-mono text-[10px] uppercase tracking-widest shadow-sm border border-ink/10 flex items-center gap-2">
+                <Layers size={14} />
+                View 4 pages
+              </div>
+              {/* Subtle overlay on hover for better affordance */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
+            </div>
+
+            {/* Dashboard Group 2 Preview */}
+            <div 
+              className="relative overflow-hidden rounded-2xl border border-ink/10 shadow-xl cursor-pointer group" 
+              onClick={() => setActiveLightboxIndex(1)}
+            >
+              <img
+                src={screenshot55}
+                alt="Dashboard overview 2"
+                className="w-full object-cover"
+                style={{ aspectRatio: "16/9" }}
+              />
+              <div className="absolute top-4 right-4 bg-paper/90 backdrop-blur-sm text-ink px-4 py-2 rounded-full font-mono text-[10px] uppercase tracking-widest shadow-sm border border-ink/10 flex items-center gap-2">
+                <Layers size={14} />
+                View 4 pages
+              </div>
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
             </div>
           </div>
-
-          <style>{`
-            @keyframes marquee-rtl {
-              0%   { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-            }
-          `}</style>
 
           {/* CTA FOOTER */}
           <div className="mt-12 pt-8 border-t border-ink/10 flex justify-end">
@@ -946,37 +977,57 @@ export function Project() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-4 backdrop-blur-md pointer-events-none"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black/90 p-4 backdrop-blur-md"
+            onClick={() => setActiveLightboxIndex(null)}
           >
             {/* Top Header info */}
-            <div className="absolute top-6 left-6 text-white/70 font-mono text-[11px] tracking-wider uppercase">
-              <span className="font-semibold text-white">{dashboards[activeLightboxIndex].title}</span>
+            <div className="absolute top-6 left-6 text-white/70 font-mono text-[11px] tracking-wider uppercase z-10">
+              <span className="font-semibold text-white">Dashboard Overview</span>
               <span className="mx-2">·</span>
-              <span>{activeLightboxIndex + 1} / {images.length}</span>
+              <span>4 Views</span>
             </div>
 
-            {/* Main Image View */}
-            <div className="relative max-w-5xl max-h-[75vh] w-full flex items-center justify-center">
-              <motion.img
-                key={activeLightboxIndex}
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                src={images[activeLightboxIndex]}
-                alt={dashboards[activeLightboxIndex].title}
-                className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl border border-white/10"
-              />
-            </div>
+            {/* Close Button */}
+            <button 
+              className="absolute top-6 right-6 text-white/70 hover:text-white transition-colors z-10"
+              onClick={(e) => { e.stopPropagation(); setActiveLightboxIndex(null); }}
+            >
+              <X size={24} />
+            </button>
 
-            {/* Description metadata */}
-            <div className="absolute bottom-8 text-center max-w-xl px-4">
-              <p className="text-white text-sm font-medium mb-2">{dashboards[activeLightboxIndex].description}</p>
-              <div className="flex flex-wrap justify-center gap-1.5 mt-2">
-                {dashboards[activeLightboxIndex].tags.map((tag, idx) => (
-                  <span key={idx} className="font-mono text-[9px] uppercase tracking-widest text-white/50 border border-white/10 rounded-full px-2 py-0.5">
-                    {tag}
-                  </span>
+            {/* Grid View */}
+            <div 
+              className="w-full max-w-7xl h-[85vh] overflow-y-auto mt-12 pr-2"
+              onClick={(e) => e.stopPropagation()}
+              data-lenis-prevent="true"
+            >
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 pb-12">
+                {(activeLightboxIndex === 0 ? dashboards : dashboards2).map((board, idx) => (
+                  <motion.div 
+                    key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="flex flex-col items-center bg-white/5 border border-white/10 rounded-2xl p-4 shadow-2xl"
+                  >
+                    <img
+                      src={board.src}
+                      alt={board.title}
+                      className="w-full object-cover rounded-lg border border-white/10 shadow-lg"
+                      style={{ aspectRatio: "16/9" }}
+                    />
+                    <div className="mt-4 text-center w-full px-2">
+                      <h3 className="text-white font-semibold mb-1">{board.title}</h3>
+                      <p className="text-white/70 text-xs mb-3">{board.description}</p>
+                      <div className="flex flex-wrap justify-center gap-1.5">
+                        {board.tags.map((tag, tIdx) => (
+                          <span key={tIdx} className="font-mono text-[9px] uppercase tracking-widest text-white/50 border border-white/10 rounded-full px-2 py-0.5">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </motion.div>
                 ))}
               </div>
             </div>
